@@ -10,13 +10,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js 16
-      uses: actions/setup-node@v1
+    - name: Use patched Node.js
+      uses: actions/setup-node@v4
       with:
-        node-version: 16.x
+        node-version-file: .nvmrc
+        cache: npm
+
+    - name: Verify TLS certificate rejection
+      run: node .github/scripts/check-tls.cjs
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     - name: Build project
       run: npm run build
